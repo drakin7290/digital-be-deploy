@@ -1,0 +1,295 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "REST API Docs",
+        "description": "REST API Docs.",
+        "version": "1.0.0"
+    },
+    "host": "localhost:8000",
+    "basePath": "/api/v1",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "/customer/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get a JWT via given credentials",
+                "description": "Returns a JWT token",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "formData",
+                        "description": "Student ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "Password",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "data": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvYXBpL2xvZ2luIiwiaWF0IjoxNjIwNjIxNjA4LCJleHAiOjE2MjA2Mjc2MDgsIm5iZiI6MTYyMDYyMTYwOCwianRpIjoiTzRVMTM4Q2Fpd1JjM2lxbSJ9.SD_iJmpMSjcnhldl-SP_Gb0Lv9pTde0J32A-JfKzZoU"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "bearer"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "example": 3600
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "headers": {
+                            "Authorization": {
+                                "description": "Bearer {token}",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request data",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "boolean",
+                                    "example": true
+                                },
+                                "message": {
+                                    "type": "object",
+                                    "example": {
+                                        "email": [
+                                            "The email field is required."
+                                        ]
+                                    }
+                                },
+                                "type": {
+                                    "type": "integer",
+                                    "example": 400
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/customer/attendance": {
+            "post": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Checkin user",
+                "description": "Returns a status checkin",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "example": "Successful attendance"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "headers": {
+                            "Authorization": {
+                                "description": "Bearer {token}",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request data",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "boolean",
+                                    "example": "true"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "example": "This user does not exist"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/customer/list_attendance": {
+            "get": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Get list date checkin of user",
+                "description": "Returns a list dates",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "example": "['2023-06-05, 2023-06-04, 2023-06-03']"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "headers": {
+                            "Authorization": {
+                                "description": "Bearer {token}",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/customer/streak": {
+            "get": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Get list streak checkin",
+                "description": "Returns a streak",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "streak": {
+                                    "type": "number",
+                                    "example": "2"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "headers": {
+                            "Authorization": {
+                                "description": "Bearer {token}",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "Customer": {
+            "required": [
+                "name",
+                "email",
+                "student_id"
+            ],
+            "properties": {
+                "name": {
+                    "description": "Name of the customer",
+                    "type": "string"
+                },
+                "student_id": {
+                    "description": "Student id of the customer",
+                    "type": "string"
+                },
+                "avatar": {
+                    "description": "Avatar of the customer",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email of the customer",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "Phone number of the customer",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
